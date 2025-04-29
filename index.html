@@ -3,23 +3,21 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>食の好み診断フォーム</title>
+  <title>食の宗派 診断ツール</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-xl">
     <div id="form-step" class="text-center">
       <h2 class="text-xl font-bold mb-4" id="step-title">ステップ 1</h2>
       <p class="mb-4" id="question">どちらを選びますか？</p>
-      <div class="flex flex-col gap-4">
-        <button class="choice-btn bg-blue-500 hover:bg-blue-600 text-white py-2 rounded" data-choice="A">選択肢 A</button>
-        <button class="choice-btn bg-green-500 hover:bg-green-600 text-white py-2 rounded" data-choice="B">選択肢 B</button>
-      </div>
+      <div id="options" class="flex flex-col gap-4"></div>
     </div>
 
     <div id="result" class="hidden text-center">
       <h2 class="text-xl font-bold mb-4">あなたの選択結果</h2>
-      <ul id="result-list" class="text-left list-disc list-inside text-gray-700"></ul>
+      <ul id="result-list" class="text-left list-disc list-inside text-gray-700 mb-4"></ul>
+      <p class="font-mono text-lg text-blue-600">あなたのコード: <strong id="code-result"></strong></p>
       <button onclick="location.reload()" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
         やり直す
       </button>
@@ -29,95 +27,80 @@
   <script>
     const questions = [
       {
-        question: '焼肉はどうする？',
-        options: ['ガンガン焼く', '自分の肉だけじっくり育てる'],
-      },
-      {
-        question: '鍋はどうする？',
-        options: ['鍋奉行派', '人に任せる'],
-      },
-      {
-        question: '食べる順番はどうする？',
-        options: ['好きなものから食べる', '好きなものは最後'],
-      },
-      {
-        question: 'きのこの山たけのこの里どっち？',
+        question: 'きのこの山 or たけのこの里',
         options: ['きのこの山派', 'たけのこの里派'],
       },
       {
-        question: '麻婆豆腐はどうする？',
+        question: '焼肉の焼き方',
+        options: ['いっきにガンガン焼く', '自分のペースで焼く'],
+      },
+      {
+        question: 'カレー',
+        options: ['ドロドロ派', 'サラサラ派'],
+      },
+      {
+        question: '麻婆豆腐は…',
         options: ['絹派', '絹ごし派'],
+      },
+      {
+        question: 'ルートビア',
+        options: ['飲める', '飲めない'],
+      },
+      {
+        question: '牛丼',
+        options: ['すき家', '吉野家', '松屋', 'ひろ家'],
       },
     ];
 
-    const totalSteps = questions.length;
     let currentStep = 0;
-    const choices = [];
+    const answers = [];
 
     const stepDiv = document.getElementById('form-step');
     const resultDiv = document.getElementById('result');
     const resultList = document.getElementById('result-list');
-    const choiceButtons = document.querySelectorAll('.choice-btn');
+    const codeResult = document.getElementById('code-result');
     const questionText = document.getElementById('question');
-    const title = stepDiv.querySelector('h2');
+    const stepTitle = document.getElementById('step-title');
+    const optionsDiv = document.getElementById('options');
 
-    function updateStep() {
+    function renderStep() {
       const q = questions[currentStep];
-      title.textContent = `ステップ ${currentStep + 1}`;
+      stepTitle.textContent = `ステップ ${currentStep + 1}`;
       questionText.textContent = q.question;
-      choiceButtons[0].textContent = q.options[0];
-      choiceButtons[1].textContent = q.options[1];
-      choiceButtons.forEach(button => {
-        button.classList.remove('opacity-50');
-        button.disabled = false;
+      optionsDiv.innerHTML = '';
+
+      q.options.forEach((opt, index) => {
+        const btn = document.createElement('button');
+        btn.className = 'bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded';
+        btn.textContent = opt;
+        btn.onclick = () => {
+          answers.push(index);
+          if (currentStep < questions.length - 1) {
+            currentStep++;
+            renderStep();
+          } else {
+            showResult();
+          }
+        };
+        optionsDiv.appendChild(btn);
       });
     }
 
-    choiceButtons.forEach(button => {
-      button.addEventListener('click', () => {
-        const choice = button.getAttribute('data-choice');
-        choices.push(choice);
-
-        if (currentStep < totalSteps - 1) {
-          currentStep++;
-          updateStep();
-        } else {
-          showResults();
-        }
-      });
-    });
-
-    function showResults() {
+    function showResult() {
       stepDiv.classList.add('hidden');
       resultDiv.classList.remove('hidden');
-      choices.forEach((choice, index) => {
+
+      const code = answers.join('');
+      codeResult.textContent = code;
+
+      answers.forEach((index, i) => {
         const li = document.createElement('li');
-        li.textContent = `ステップ${index + 1}: ${choice}`;
+        li.textContent = `ステップ${i + 1}: ${questions[i].question} → ${questions[i].options[index]}`;
         resultList.appendChild(li);
       });
     }
 
-    updateStep();
-
-    function showResults() {
-        stepDiv.classList.add('hidden');
-        resultDiv.classList.remove('hidden');
-        let code = "";
-
-        choices.forEach((choice, index) => {
-            const char = choice === 'A' ? 'A' : 'B'; // シンプルな記号化
-            code += char;
-
-            const li = document.createElement('li');
-            li.textContent = `ステップ${index + 1}: ${questions[index].options[char === 'A' ? 0 : 1]}`;
-            resultList.appendChild(li);
-        });
-
-        const codeText = document.createElement('p');
-        codeText.className = "mt-4 font-mono text-lg text-blue-600";
-        codeText.innerHTML = `あなたのコード: <strong>${code}</strong>`;
-        resultDiv.appendChild(codeText);
-    }
+    renderStep();
   </script>
 </body>
 </html>
