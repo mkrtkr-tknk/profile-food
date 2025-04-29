@@ -1,11 +1,67 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>2択 × 5ステップフォーム</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    aaaaaaaaaaaaaaaa
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-md">
+    <div id="form-step" class="text-center">
+      <h2 class="text-xl font-bold mb-4">ステップ 1</h2>
+      <p class="mb-4" id="question">どちらを選びますか？</p>
+      <div class="flex flex-col gap-4">
+        <button class="choice-btn bg-blue-500 hover:bg-blue-600 text-white py-2 rounded" data-choice="A">選択肢 A</button>
+        <button class="choice-btn bg-green-500 hover:bg-green-600 text-white py-2 rounded" data-choice="B">選択肢 B</button>
+      </div>
+    </div>
+
+    <div id="result" class="hidden text-center">
+      <h2 class="text-xl font-bold mb-4">あなたの選択結果</h2>
+      <ul id="result-list" class="text-left list-disc list-inside text-gray-700"></ul>
+      <button onclick="location.reload()" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
+        やり直す
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const totalSteps = 5;
+    let currentStep = 1;
+    const choices = [];
+
+    const stepDiv = document.getElementById('form-step');
+    const resultDiv = document.getElementById('result');
+    const resultList = document.getElementById('result-list');
+    const choiceButtons = document.querySelectorAll('.choice-btn');
+    const questionText = document.getElementById('question');
+    const title = stepDiv.querySelector('h2');
+
+    choiceButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const choice = button.getAttribute('data-choice');
+        choices.push(choice);
+
+        if (currentStep < totalSteps) {
+          currentStep++;
+          title.textContent = `ステップ ${currentStep}`;
+          questionText.textContent = `ステップ${currentStep}：どちらを選びますか？`;
+        } else {
+          showResults();
+        }
+      });
+    });
+
+    function showResults() {
+      stepDiv.classList.add('hidden');
+      resultDiv.classList.remove('hidden');
+      choices.forEach((choice, index) => {
+        const li = document.createElement('li');
+        li.textContent = `ステップ${index + 1}: 選択肢 ${choice}`;
+        resultList.appendChild(li);
+      });
+    }
+  </script>
 </body>
 </html>
