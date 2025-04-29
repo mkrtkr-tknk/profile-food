@@ -1,0 +1,23 @@
+{
+  "name": "profile-food",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/mkrtkr-tknk/profile-food#readme",
+  "bugs": {
+    "url": "https://github.com/mkrtkr-tknk/profile-food/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mkrtkr-tknk/profile-food.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "tailwindcss": "^4.1.4"
+  }
+}
