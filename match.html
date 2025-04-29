@@ -1,22 +1,22 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
-  <title>比較ツール|食の宗派 診断ツール</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<title>比較ツール|食の宗派 診断ツール</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-2xl text-center">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-2">
+    <div class="bg-white p-8 rounded shadow-md w-full max-w-xl">
     <h2 class="text-xl font-bold mb-4">コード比較</h2>
 
     <div class="mb-4 text-left">
-      <label for="code1" class="block font-semibold mb-1">あなたのコード（数字列）</label>
-      <input type="text" id="code1" placeholder="例: 01231" class="border p-2 w-full rounded" />
+    <label for="code1" class="block font-semibold mb-1">あなたのコード（数字列）</label>
+    <input type="text" id="code1" placeholder="例: 01231" class="border p-2 w-full rounded" />
     </div>
 
     <div class="mb-4 text-left">
-      <label for="code2" class="block font-semibold mb-1">比較対象者のコード（数字列）</label>
-      <input type="text" id="code2" placeholder="例: 01201" class="border p-2 w-full rounded" />
+    <label for="code2" class="block font-semibold mb-1">比較対象者のコード（数字列）</label>
+    <input type="text" id="code2" placeholder="例: 01201" class="border p-2 w-full rounded" />
     </div>
 
     <button onclick="compareCodes()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">比較する</button>
@@ -24,80 +24,80 @@
     <div id="result" class="mt-6 text-lg text-gray-700 font-semibold"></div>
 
     <div id="comparison-table" class="mt-6 text-left hidden">
-      <h3 class="text-md font-bold mb-2">各ステップの比較</h3>
-      <table class="table-auto w-full text-sm border">
+    <h3 class="text-md font-bold mb-2">各ステップの比較</h3>
+    <table class="table-auto w-full text-sm border">
         <thead>
-          <tr class="bg-gray-200">
+        <tr class="bg-gray-200">
             <th class="border px-2 py-1">ステップ</th>
             <th class="border px-2 py-1">質問</th>
             <th class="border px-2 py-1">あなたの回答</th>
             <th class="border px-2 py-1">相手の回答</th>
-          </tr>
+        </tr>
         </thead>
         <tbody id="table-body" class="text-center"></tbody>
-      </table>
+    </table>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     // 質問と選択肢
     const questions = [
-      {
+    {
         question: 'きのこの山 or たけのこの里',
         options: ['きのこの山派', 'たけのこの里派'],
-      },
-      {
+    },
+    {
         question: '焼肉の焼き方',
         options: ['いっきにガンガン焼く', '自分のペースで焼く'],
-      },
-      {
+    },
+    {
         question: 'カレー',
         options: ['ドロドロ派', 'サラサラ派'],
-      },
-      {
+    },
+    {
         question: '麻婆豆腐は…',
-        options: ['絹派', '絹ごし派'],
-      },
-      {
+        options: ['絹ごし豆腐派', '木綿豆腐派'],
+    },
+    {
         question: 'ルートビア',
         options: ['飲める', '飲めない'],
-      },
-      {
+    },
+    {
         question: '牛丼',
         options: ['すき家', '吉野家', '松屋', 'ひろ家'],
-      },
+    },
     ];
 
     function compareCodes() {
-      const code1 = document.getElementById('code1').value.trim();
-      const code2 = document.getElementById('code2').value.trim();
-      const resultEl = document.getElementById('result');
-      const tableEl = document.getElementById('comparison-table');
-      const tableBody = document.getElementById('table-body');
+    const code1 = document.getElementById('code1').value.trim();
+    const code2 = document.getElementById('code2').value.trim();
+    const resultEl = document.getElementById('result');
+    const tableEl = document.getElementById('comparison-table');
+    const tableBody = document.getElementById('table-body');
 
-      tableBody.innerHTML = '';
-      tableEl.classList.add('hidden');
+    tableBody.innerHTML = '';
+    tableEl.classList.add('hidden');
 
-      if (code1.length !== questions.length || code2.length !== questions.length) {
+    if (code1.length !== questions.length || code2.length !== questions.length) {
         resultEl.textContent = "エラー：コードの長さが質問数と一致していません。";
         return;
-      }
+    }
 
-      let matchCount = 0;
+    let matchCount = 0;
 
-      for (let i = 0; i < questions.length; i++) {
+    for (let i = 0; i < questions.length; i++) {
         const q = questions[i];
         const yourIndex = parseInt(code1[i]);
         const theirIndex = parseInt(code2[i]);
 
         // 入力エラーチェック
         if (
-          isNaN(yourIndex) || isNaN(theirIndex) ||
-          yourIndex < 0 || yourIndex >= q.options.length ||
-          theirIndex < 0 || theirIndex >= q.options.length
+        isNaN(yourIndex) || isNaN(theirIndex) ||
+        yourIndex < 0 || yourIndex >= q.options.length ||
+        theirIndex < 0 || theirIndex >= q.options.length
         ) {
-          resultEl.textContent = `エラー：ステップ${i + 1}のコードが無効です。`;
-          return;
+        resultEl.textContent = `エラー：ステップ${i + 1}のコードが無効です。`;
+        return;
         }
 
         const match = yourIndex === theirIndex;
@@ -107,18 +107,18 @@
         const theirAnswer = q.options[theirIndex];
 
         const row = `<tr>
-          <td class="border px-2 py-1 text-center">ステップ${i + 1}</td>
-          <td class="border px-2 py-1">${q.question}</td>
-          <td class="border px-2 py-1">${yourAnswer}</td>
-          <td class="border px-2 py-1">${theirAnswer}</td>
+        <td class="border px-2 py-1 text-center">ステップ${i + 1}</td>
+        <td class="border px-2 py-1">${q.question}</td>
+        <td class="border px-2 py-1">${yourAnswer}</td>
+        <td class="border px-2 py-1">${theirAnswer}</td>
         </tr>`;
         tableBody.innerHTML += row;
-      }
-
-      const matchRate = (matchCount / questions.length * 100).toFixed(1);
-      resultEl.textContent = `マッチ率: ${matchRate}%（${matchCount} / ${questions.length}）`;
-      tableEl.classList.remove('hidden');
     }
-  </script>
+
+    const matchRate = (matchCount / questions.length * 100).toFixed(1);
+    resultEl.textContent = `マッチ率: ${matchRate}%（${matchCount} / ${questions.length}）`;
+    tableEl.classList.remove('hidden');
+    }
+</script>
 </body>
 </html>

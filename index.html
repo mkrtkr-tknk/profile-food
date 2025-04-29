@@ -1,55 +1,55 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>食の宗派 診断ツール</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>食の宗派 診断ツール</title>
+<script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-  <div class="bg-white p-8 rounded shadow-md w-full max-w-xl">
+<body class="bg-gray-100 flex items-center justify-center min-h-screen p-2">
+<div class="bg-white p-8 rounded shadow-md w-full max-w-xl">
     <div id="form-step" class="text-center">
-      <h2 class="text-xl font-bold mb-4" id="step-title">ステップ 1</h2>
-      <p class="mb-4" id="question">どちらを選びますか？</p>
-      <div id="options" class="flex flex-col gap-4"></div>
+    <h2 class="text-xl font-bold mb-4" id="step-title">ステップ 1</h2>
+    <p class="mb-4" id="question">どちらを選びますか？</p>
+    <div id="options" class="flex flex-col gap-4"></div>
     </div>
 
     <div id="result" class="hidden text-center">
-      <h2 class="text-xl font-bold mb-4">あなたの選択結果</h2>
-      <ul id="result-list" class="text-left list-disc list-inside text-gray-700 mb-4"></ul>
-      <p class="font-mono text-lg text-blue-600">あなたのコード: <strong id="code-result"></strong></p>
-      <button onclick="location.reload()" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
+    <h2 class="text-xl font-bold mb-4">あなたの選択結果</h2>
+    <ul id="result-list" class="text-left list-disc list-inside text-gray-700 mb-4"></ul>
+    <p class="font-mono text-lg text-blue-600">あなたのコード: <strong id="code-result"></strong></p>
+    <button onclick="location.reload()" class="mt-6 bg-gray-500 hover:bg-gray-600 text-white py-2 px-4 rounded">
         やり直す
-      </button>
+    </button>
     </div>
-  </div>
+</div>
 
-  <script>
+<script>
     const questions = [
-      {
+    {
         question: 'きのこの山 or たけのこの里',
         options: ['きのこの山派', 'たけのこの里派'],
-      },
-      {
+    },
+    {
         question: '焼肉の焼き方',
         options: ['いっきにガンガン焼く', '自分のペースで焼く'],
-      },
-      {
+    },
+    {
         question: 'カレー',
         options: ['ドロドロ派', 'サラサラ派'],
-      },
-      {
+    },
+    {
         question: '麻婆豆腐は…',
-        options: ['絹派', '絹ごし派'],
-      },
-      {
+        options: ['絹ごし豆腐派', '木綿豆腐派'],
+    },
+    {
         question: 'ルートビア',
         options: ['飲める', '飲めない'],
-      },
-      {
+    },
+    {
         question: '牛丼',
         options: ['すき家', '吉野家', '松屋', 'ひろ家'],
-      },
+    },
     ];
 
     let currentStep = 0;
@@ -64,43 +64,43 @@
     const optionsDiv = document.getElementById('options');
 
     function renderStep() {
-      const q = questions[currentStep];
-      stepTitle.textContent = `ステップ ${currentStep + 1}`;
-      questionText.textContent = q.question;
-      optionsDiv.innerHTML = '';
+    const q = questions[currentStep];
+    stepTitle.textContent = `ステップ ${currentStep + 1}`;
+    questionText.textContent = q.question;
+    optionsDiv.innerHTML = '';
 
-      q.options.forEach((opt, index) => {
+    q.options.forEach((opt, index) => {
         const btn = document.createElement('button');
         btn.className = 'bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded';
         btn.textContent = opt;
         btn.onclick = () => {
-          answers.push(index);
-          if (currentStep < questions.length - 1) {
+        answers.push(index);
+        if (currentStep < questions.length - 1) {
             currentStep++;
             renderStep();
-          } else {
+        } else {
             showResult();
-          }
+        }
         };
         optionsDiv.appendChild(btn);
-      });
+    });
     }
 
     function showResult() {
-      stepDiv.classList.add('hidden');
-      resultDiv.classList.remove('hidden');
+    stepDiv.classList.add('hidden');
+    resultDiv.classList.remove('hidden');
 
-      const code = answers.join('');
-      codeResult.textContent = code;
+    const code = answers.join('');
+    codeResult.textContent = code;
 
-      answers.forEach((index, i) => {
+    answers.forEach((index, i) => {
         const li = document.createElement('li');
         li.textContent = `ステップ${i + 1}: ${questions[i].question} → ${questions[i].options[index]}`;
         resultList.appendChild(li);
-      });
+    });
     }
 
     renderStep();
-  </script>
+</script>
 </body>
 </html>
