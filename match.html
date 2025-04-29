@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>コード比較</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+  <div class="bg-white p-8 rounded shadow-md w-full max-w-md text-center">
+    <h2 class="text-xl font-bold mb-4">コード比較</h2>
+
+    <input type="text" id="code1" placeholder="コード1" class="border p-2 w-full mb-4 rounded" />
+    <input type="text" id="code2" placeholder="コード2" class="border p-2 w-full mb-4 rounded" />
+
+    <button onclick="compareCodes()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">比較する</button>
+
+    <div id="result" class="mt-6 text-lg text-gray-700 font-semibold"></div>
+  </div>
+
+  <script>
+    function compareCodes() {
+      const code1 = document.getElementById('code1').value.trim().toUpperCase();
+      const code2 = document.getElementById('code2').value.trim().toUpperCase();
+      const resultEl = document.getElementById('result');
+
+      if (code1.length !== code2.length || code1.length === 0) {
+        resultEl.textContent = "コードの長さが一致していません。";
+        return;
+      }
+
+      let matchCount = 0;
+      for (let i = 0; i < code1.length; i++) {
+        if (code1[i] === code2[i]) matchCount++;
+      }
+
+      const matchRate = (matchCount / code1.length * 100).toFixed(1);
+      resultEl.textContent = `マッチ率: ${matchRate}%（${matchCount} / ${code1.length}）`;
+    }
+  </script>
+</body>
+</html>
